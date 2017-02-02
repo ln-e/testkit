@@ -1,0 +1,21 @@
+#!/bin/bash
+
+DIR=`dirname "$0"`
+FILE_NAME="parser3 parser3.cgi *.parser3.cgi *.parser3"
+SEARCH_IN=$(echo "`pwd`/cgi:`pwd`/cgi-bin:$PATH:$DIR/../cgi" | tr ':' '\n')
+PARSER=
+
+for dir in $SEARCH_IN; do
+    for file in $FILE_NAME; do
+	if [ -f $dir/$file ]; then
+	    PARSER="$dir/$file"
+	fi;
+    done;
+done;
+
+if [ -z "$PARSER" ]; then
+    echo "Parser not found :("
+    exit 1
+fi
+
+bash -c "$PARSER \"$DIR/testkit.p\" $*"

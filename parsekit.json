@@ -1,0 +1,24 @@
+{
+	"name":"testkit",
+	"type":"library",
+	"description":"",
+	"docRoot":"bin",
+	"dynamicDocRoot":true,
+	"require":{
+		"parser":">=3.4.3",
+		"ln-e\/console":"*"
+	},
+    "devAutoload":{
+        "files":{
+            "0":"Debug.p"
+        },
+        "classpath":{
+            "0":"classes"
+        }
+    },
+	"autoload":{
+        "namespace":{
+            "Testkit":"src\/Testkit"
+        }
+	}
+}
