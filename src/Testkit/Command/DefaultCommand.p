@@ -34,18 +34,24 @@ Ln-e/Console/CommandInterface
 #-----------------------------------------------------------------------------
 @execute[input;output]
 
-
 #    $testkit[^file::load[text;/testkit.json]]
     ^self.runTests[$testkit]
+
+    ^self.testClasses.foreach[className;object]{
+        ^output.writeln[^reflection:class_name[$object] execution results:]
+        ^output.writeln[  success asserts: $object.successAsserts]
+        ^output.writeln[  failed asserts: ^object.failedAsserts._count[]]
+    }
 ###
 
 
 @runTests[config]
     ^use[/vault/classpath.p]
-    ^dstop[$MAIN:_autouseOrigin]
+
     $self.testClasses[^self.findTests[/tests]]
-    ^dstop[$self.testClasses]
+    ^self.executeTests[]
 ###
+
 
 @executeTests[][result]
     ^self.testClasses.foreach[className;object]{
@@ -58,6 +64,7 @@ Ln-e/Console/CommandInterface
     }
 ###
 
+
 @findTests[dir][result;locals]
     $result[^hash::create[]]
     $list[^file:list[$dir]]
@@ -66,8 +73,6 @@ Ln-e/Console/CommandInterface
             ^result.add[^self.findTests[$dir/$list.name]]
         }(^list.name.match[Test.p^$][in]>0){
             $className[^list.name.mid(0;^list.name.length[] - 2)]
-#            ^dstop[^dir.replace[tests;src]/^list.name.replace[Test.p;.p]]
-#            ^use[^dir.replace[tests;src]/^list.name.replace[Test.p;.p]]
             ^use[$dir/$list.name]
             $result.$className[^reflection:create[$className;create]]
         }
